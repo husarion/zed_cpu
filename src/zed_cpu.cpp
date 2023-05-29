@@ -18,8 +18,8 @@ public:
     {
         // ROS initialization
         image_transport::ImageTransport it(nh_);
-        leftImagePub_ = it.advertise("zed_camera/left_image", 1);
-        rightImagePub_ = it.advertise("zed_camera/right_image", 1);
+        leftImagePub_ = it.advertise("rgb/left_image", 1);
+        rightImagePub_ = it.advertise("rgb/right_image", 1);
         imuPub_ = nh_.advertise<sensor_msgs::Imu>("imu_data", 1);
 
         cameraInit();
