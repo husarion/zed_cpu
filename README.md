@@ -1,2 +1,3 @@
-# zed-cpu-docker
-Dockerized Stereolabs ZED2 and ZED2i package for CPU
+# zed-cpu
+
+ROS wrapper for Stereolabs cameras dedicatet for CPU. Based on Stereolabs [zed-open-capture](https://github.com/stereolabs/zed-open-capture) repository.
