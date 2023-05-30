@@ -18,8 +18,8 @@
 //
 ///////////////////////////////////////////////////////////////////////////
 
-#include "sensorcapture.hpp"
-#include "videocapture.hpp"
+#include "zed_lib/sensorcapture.hpp"
+#include "zed_lib/videocapture.hpp"
 
 #include <sstream>
 #include <cmath>              // for round

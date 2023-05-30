@@ -12,7 +12,7 @@ ROS wrapper for Stereolabs cameras (ZED 2, ZED 2i, and ZED Mini) dedicatet for C
 
  * Stereo camera: [ZED 2i](https://www.stereolabs.com/zed-2i/), [ZED 2](https://www.stereolabs.com/zed-2/), [ZED Mini](https://www.stereolabs.com/zed-mini/)
  * Linux OS
- * ROS
+ * ROS Noetic
  * GCC (v7.5+)
  * OpenCV (v3.4.0+)
 
@@ -28,11 +28,11 @@ ROS wrapper for Stereolabs cameras (ZED 2, ZED 2i, and ZED Mini) dedicatet for C
 
     `sudo apt install libusb-1.0-0-dev libhidapi-libusb0 libhidapi-dev`
 
-* Install OpenCV to build the examples (optional)
+* Install OpenCV:
 
     `sudo apt install libopencv-dev libopencv-viz-dev`
 
-* Install ROS dependencies
+* Install ROS dependencies:
 
     `rosdep install --from-paths src --ignore-src -r -y`
 
@@ -41,17 +41,23 @@ ROS wrapper for Stereolabs cameras (ZED 2, ZED 2i, and ZED Mini) dedicatet for C
 Stereo cameras such as ZED 2 and ZED Mini have built-in sensors (e.g. IMU) that are identified as USB HID devices.
 To be able to access the USB HID device, you must add a udev rule contained in the `udev` folder:
 
+    ```bash
     cd src/zed-cpu/udev
     bash install_udev_rule.sh
+    ```
 
 ### Build code
 
+    ```bash
     cd ~/ros_ws
     catkin_make
-
+    ```
 ### Run code
 
-    rosrun zed_cpu zed_node
+    ```bash
+    source ~/ros_ws/devel/setup.bash
+    roslaunch zed_cpu zed.launch
+    ```
 
 ## Coordinates system
 

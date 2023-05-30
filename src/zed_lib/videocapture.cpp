@@ -18,8 +18,8 @@
 //
 ///////////////////////////////////////////////////////////////////////////
 
-#include "videocapture.hpp"
-#include "sensorcapture.hpp"
+#include "zed_lib/videocapture.hpp"
+#include "zed_lib/sensorcapture.hpp"
 
 #include <sys/stat.h>         // for stat, S_ISCHR
 #include <errno.h>            // for errno, EBADRQC, EINVAL, ENOBUFS, ENOENT

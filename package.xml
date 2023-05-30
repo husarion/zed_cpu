@@ -1,23 +1,27 @@
 <?xml version="1.0"?>
-<package format="2">
+<package format="3">
   <name>zed_cpu</name>
   <version>1.0.0</version>
-  <description>The zed_cpu package</description>
+  <description>Package for ZED cameras running on CPU</description>
 
   <author email="rafal.gorecki@husarion.com">Rafał Górecki</author>
   <maintainer email="support@husarion.com">Husarion</maintainer>
-
+  
+  <url type="website">https://husarion.com/</url>
+  <url type="repository">https://github.com/husarion/panther_ros</url>
+  <url type="bugtracker">https://github.com/husarion/panther_ros/issues</url>
+  
   <license>Apache License 2.0</license>
 
   <buildtool_depend>catkin</buildtool_depend>
 
-  <depend>roscpp</depend>
-  <depend>std_msgs</depend>
-  <depend>sensor_msgs</depend>
   <depend>cv_bridge</depend>
   <depend>image_transport</depend>
-  <depend>libopencv-dev</depend>
   <depend>libhidapi-dev</depend>
+  <depend>libopencv-dev</depend>
   <depend>libusb-1.0-dev</depend>
+  <depend>sensor_msgs</depend>
+  <depend>std_msgs</depend>
+  <depend>roscpp</depend>
 
 </package>

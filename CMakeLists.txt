@@ -18,11 +18,11 @@ endif()
 list(INSERT CMAKE_MODULE_PATH 0 "${PROJECT_SOURCE_DIR}/cmake")
 
 find_package(catkin REQUIRED COMPONENTS
-  roscpp
-  std_msgs
-  sensor_msgs
   cv_bridge
   image_transport
+  roscpp
+  sensor_msgs
+  std_msgs
 )
 find_package(HIDAPI REQUIRED)
 find_package(LIBUSB 1 REQUIRED)
@@ -30,15 +30,15 @@ find_package(LIBUSB 1 REQUIRED)
 catkin_package()
 
 include_directories(
-  ${PROJECT_SOURCE_DIR}/include
   ${catkin_INCLUDE_DIRS}
   ${HIDAPI_INCLUDE_DIRS}
   ${LibUSB_INCLUDE_DIRS}
+  ${PROJECT_SOURCE_DIR}/include/zed_cpu
 )
 
 add_library(zed_lib
-  src/videocapture.cpp
-  src/sensorcapture.cpp
+  src/zed_lib/videocapture.cpp
+  src/zed_lib/sensorcapture.cpp
 )
 
 target_link_libraries(zed_lib
@@ -48,10 +48,11 @@ target_link_libraries(zed_lib
 )
 
 add_executable(zed_node
-  src/zed_cpu.cpp
+  src/main.cpp src/zed_cpu.cpp
 )
 
 target_link_libraries(zed_node
   zed_lib
   ${catkin_LIBRARIES}
+  ${PROJECT_SOURCE_DIR}/include/zed_cpu
 )
