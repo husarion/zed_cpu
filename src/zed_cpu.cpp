@@ -6,9 +6,9 @@ ZedCameraNode::ZedCameraNode(
 : nh_(nh), it_(it)
 {
   // ROS initialization
-  leftImagePub_ = it_->advertise("rgb/left_image", 1);
-  rightImagePub_ = it_->advertise("rgb/right_image", 1);
-  imuPub_ = nh_->advertise<sensor_msgs::Imu>("imu_data", 1);
+  left_image_pub_ = it_->advertise("rgb/left_image", 1);
+  right_image_pub_ = it_->advertise("rgb/right_image", 1);
+  imu_pub_ = nh_->advertise<sensor_msgs::Imu>("imu_data", 1);
 
   cameraInit();
   sensorInit();
@@ -82,8 +82,8 @@ void ZedCameraNode::publishImages()
       cv_bridge::CvImage(std_msgs::Header(), "bgr8", rightImage).toImageMsg();
 
     // Publish the left and right image messages
-    leftImagePub_.publish(leftMsg);
-    rightImagePub_.publish(rightMsg);
+    left_image_pub_.publish(leftMsg);
+    right_image_pub_.publish(rightMsg);
   }
 }
 
@@ -114,6 +114,6 @@ void ZedCameraNode::publishIMU()
     imuMsg.angular_velocity.z = imuData.gZ;
 
     // Publish the sensor_msgs/Imu message
-    imuPub_.publish(imuMsg);
+    imu_pub_.publish(imuMsg);
   }
 }

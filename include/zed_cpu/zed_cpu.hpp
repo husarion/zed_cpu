@@ -28,9 +28,9 @@ private:
   bool is_sensInit_;
   std::shared_ptr<ros::NodeHandle> nh_;
   std::shared_ptr<image_transport::ImageTransport> it_;
-  ros::Publisher imuPub_;
-  image_transport::Publisher leftImagePub_;
-  image_transport::Publisher rightImagePub_;
+  ros::Publisher imu_pub_;
+  image_transport::Publisher left_image_pub_;
+  image_transport::Publisher right_image_pub_;
   std::unique_ptr<sl_oc::video::VideoCapture> cap_;
   std::unique_ptr<sl_oc::sensors::SensorCapture> sens_;
 };
