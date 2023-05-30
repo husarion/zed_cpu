@@ -8,8 +8,8 @@
   <maintainer email="support@husarion.com">Husarion</maintainer>
   
   <url type="website">https://husarion.com/</url>
-  <url type="repository">https://github.com/husarion/panther_ros</url>
-  <url type="bugtracker">https://github.com/husarion/panther_ros/issues</url>
+  <url type="repository">https://github.com/husarion/zed_cpu</url>
+  <url type="bugtracker">https://github.com/husarion/zed_cpu/issues</url>
   
   <license>Apache License 2.0</license>
 
