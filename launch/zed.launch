@@ -1,0 +1,5 @@
+<launch>
+
+    <node pkg="zed_cpu" exec="zed_node" name="zed_node"/>
+
+</launch>
