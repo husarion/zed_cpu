@@ -20,7 +20,6 @@ private:
   void PublishImages();
   void PublishIMU();
 
-  bool is_sens_init_;
   std::string node_name_;
   std::shared_ptr<ros::NodeHandle> nh_;
   std::shared_ptr<image_transport::ImageTransport> it_;

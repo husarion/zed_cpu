@@ -74,7 +74,11 @@ void ZedCameraNode::SensorInit()
   std::cout<<node_name_<<std::endl;
   ROS_INFO("[%s] Connected to IMU firmware version: %d.%d", node_name_.c_str(), fw_maior, fw_minor);
 
-  is_sens_init_ = sens_->initializeSensors(devs[0]);
+  // Initialize the sensors
+  if (!sens_->initializeSensors(devs[0])) {
+    RCLCPP_ERROR(nh_->get_logger(), "IMU initialize failed");
+    return;
+  }
 }
 
 void ZedCameraNode::PublishImages()
@@ -106,12 +110,6 @@ void ZedCameraNode::PublishImages()
 
 void ZedCameraNode::PublishIMU()
 {
-  // Initialize the sensors
-  if (!is_sens_init_) {
-    ROS_ERROR("[%s] Connection failed", node_name_.c_str());
-    return;
-  }
-
   // Get IMU data with a timeout of 5 milliseconds
   const sl_oc::sensors::data::Imu imu_data = sens_->getLastIMUData(5000);
 
