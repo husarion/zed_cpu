@@ -7,9 +7,9 @@ int main(int argc, char * argv[])
   auto nh = std::make_shared<ros::NodeHandle>("~");
   auto it = std::make_shared<image_transport::ImageTransport>(*nh);
 
-  ZedCameraNode zedCameraNode(nh, it);
+  ZedCameraNode zed_camera_node(nh, it);
   while (ros::ok()) {
-    zedCameraNode.run();
+    zed_camera_node.run();
     ros::spinOnce();
   }
 

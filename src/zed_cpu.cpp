@@ -1,4 +1,18 @@
+// Own header
 #include <zed_cpu.hpp>
+
+// ZED lib
+#include "zed_lib/sensorcapture.hpp"
+#include "zed_lib/videocapture.hpp"
+
+// ROS lib
+#include <ros/ros.h>
+#include <image_transport/image_transport.h>
+#include <cv_bridge/cv_bridge.h>
+#include <sensor_msgs/Imu.h>
+
+// OpenCV lib
+#include <opencv2/opencv.hpp>
 
 ZedCameraNode::ZedCameraNode(
   const std::shared_ptr<ros::NodeHandle> & nh,
@@ -10,17 +24,20 @@ ZedCameraNode::ZedCameraNode(
   right_image_pub_ = it_->advertise("rgb/right_image", 1);
   imu_pub_ = nh_->advertise<sensor_msgs::Imu>("imu_data", 1);
 
-  cameraInit();
-  sensorInit();
+  CameraInit();
+  SensorInit();
+
+  node_name_ = ros::this_node::getName();
+  ROS_INFO("[%s] Node started", node_name_.c_str());
 }
 
 void ZedCameraNode::run()
 {
-  publishImages();
-  publishIMU();
+  PublishImages();
+  PublishIMU();
 }
 
-void ZedCameraNode::cameraInit()
+void ZedCameraNode::CameraInit()
 {
   // Initialize ZED camera
   sl_oc::video::VideoParams params;
@@ -31,7 +48,7 @@ void ZedCameraNode::cameraInit()
   // Create Video Capture
   cap_ = std::make_unique<sl_oc::video::VideoCapture>(params);
   if (!cap_->initializeVideo()) {
-    ROS_ERROR("Cannot open camera video capture");
+    ROS_ERROR("[%s] Cannot open camera video capture");
     return;
   }
 
@@ -39,14 +56,14 @@ void ZedCameraNode::cameraInit()
     "Connected to camera sn: " << cap_->getSerialNumber() << " [" << cap_->getDeviceName() << "]");
 }
 
-void ZedCameraNode::sensorInit()
+void ZedCameraNode::SensorInit()
 {
   sens_ = std::make_unique<sl_oc::sensors::SensorCapture>(sl_oc::VERBOSITY::ERROR);
 
   std::vector<int> devs = sens_->getDeviceList();
 
   if (devs.size() == 0) {
-    ROS_ERROR("No available ZED 2, ZED 2i or ZED Mini cameras");
+    ROS_ERROR("[%s] No available ZED 2, ZED 2i or ZED Mini cameras");
     return;
   }
 
@@ -57,63 +74,63 @@ void ZedCameraNode::sensorInit()
     "Connected to IMU firmware version: " << std::to_string(fw_maior) << "."
                                           << std::to_string(fw_minor));
 
-  is_sensInit_ = sens_->initializeSensors(devs[0]);
+  is_sens_init_ = sens_->initializeSensors(devs[0]);
 }
 
-void ZedCameraNode::publishImages()
+void ZedCameraNode::PublishImages()
 {
   // Get last available frame
   const sl_oc::video::Frame frame = cap_->getLastFrame();
 
   // Process and publish the frame
   if (frame.data != nullptr) {
-    cv::Mat frameYUV = cv::Mat(frame.height, frame.width, CV_8UC2, frame.data);
-    cv::Mat frameBGR;
-    cv::cvtColor(frameYUV, frameBGR, cv::COLOR_YUV2BGR_YUYV);
+    cv::Mat frame_yuv = cv::Mat(frame.height, frame.width, CV_8UC2, frame.data);
+    cv::Mat frame_bgr;
+    cv::cvtColor(frame_yuv, frame_bgr, cv::COLOR_YUV2BGR_YUYV);
 
     // Split the frame into left and right images
-    cv::Mat leftImage = frameBGR(cv::Rect(0, 0, frameBGR.cols / 2, frameBGR.rows));
-    cv::Mat rightImage = frameBGR(cv::Rect(frameBGR.cols / 2, 0, frameBGR.cols / 2, frameBGR.rows));
+    cv::Mat left_img = frame_bgr(cv::Rect(0, 0, frame_bgr.cols / 2, frame_bgr.rows));
+    cv::Mat right_img = frame_bgr(cv::Rect(frame_bgr.cols / 2, 0, frame_bgr.cols / 2, frame_bgr.rows));
 
     // Convert the OpenCV images to ROS image messages
-    sensor_msgs::ImagePtr leftMsg =
-      cv_bridge::CvImage(std_msgs::Header(), "bgr8", leftImage).toImageMsg();
-    sensor_msgs::ImagePtr rightMsg =
-      cv_bridge::CvImage(std_msgs::Header(), "bgr8", rightImage).toImageMsg();
+    sensor_msgs::ImagePtr left_msg =
+      cv_bridge::CvImage(std_msgs::Header(), "bgr8", left_img).toImageMsg();
+    sensor_msgs::ImagePtr right_msg =
+      cv_bridge::CvImage(std_msgs::Header(), "bgr8", right_img).toImageMsg();
 
     // Publish the left and right image messages
-    left_image_pub_.publish(leftMsg);
-    right_image_pub_.publish(rightMsg);
+    left_image_pub_.publish(left_msg);
+    right_image_pub_.publish(right_msg);
   }
 }
 
-void ZedCameraNode::publishIMU()
+void ZedCameraNode::PublishIMU()
 {
   // Initialize the sensors
-  if (!is_sensInit_) {
-    ROS_ERROR("Connection failed");
+  if (!is_sens_init_) {
+    ROS_ERROR("[%s] Connection failed");
     return;
   }
 
   // Get IMU data with a timeout of 5 milliseconds
-  const sl_oc::sensors::data::Imu imuData = sens_->getLastIMUData(5000);
+  const sl_oc::sensors::data::Imu imu_data = sens_->getLastIMUData(5000);
 
-  if (imuData.valid == sl_oc::sensors::data::Imu::NEW_VAL) {
+  if (imu_data.valid == sl_oc::sensors::data::Imu::NEW_VAL) {
     // Create a sensor_msgs/Imu message
-    sensor_msgs::Imu imuMsg;
-    imuMsg.header.stamp = ros::Time::now();
-    imuMsg.header.frame_id = "imu_frame";
+    sensor_msgs::Imu imu_msg;
+    imu_msg.header.stamp = ros::Time::now();
+    imu_msg.header.frame_id = "imu_frame";
 
     // Convert the IMU data to the sensor_msgs/Imu message fields
-    imuMsg.linear_acceleration.x = -imuData.aX;
-    imuMsg.linear_acceleration.y = imuData.aY;
-    imuMsg.linear_acceleration.z = imuData.aZ;
+    imu_msg.linear_acceleration.x = -imu_data.aX;
+    imu_msg.linear_acceleration.y = imu_data.aY;
+    imu_msg.linear_acceleration.z = imu_data.aZ;
 
-    imuMsg.angular_velocity.x = -imuData.gX;
-    imuMsg.angular_velocity.y = imuData.gY;
-    imuMsg.angular_velocity.z = imuData.gZ;
+    imu_msg.angular_velocity.x = -imu_data.gX;
+    imu_msg.angular_velocity.y = imu_data.gY;
+    imu_msg.angular_velocity.z = imu_data.gZ;
 
     // Publish the sensor_msgs/Imu message
-    imu_pub_.publish(imuMsg);
+    imu_pub_.publish(imu_msg);
   }
 }
