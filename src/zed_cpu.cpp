@@ -76,7 +76,7 @@ void ZedCameraNode::SensorInit()
 
   // Initialize the sensors
   if (!sens_->initializeSensors(devs[0])) {
-    RCLCPP_ERROR(nh_->get_logger(), "IMU initialize failed");
+    ROS_ERROR("[%s] IMU initialize failed", node_name.c_str());
     return;
   }
 }
