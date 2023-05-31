@@ -20,6 +20,7 @@ ZedCameraNode::ZedCameraNode(
 : nh_(nh), it_(it)
 {
   // ROS initialization
+  node_name_ = ros::this_node::getName();
   left_image_pub_ = it_->advertise("rgb/left_image", 1);
   right_image_pub_ = it_->advertise("rgb/right_image", 1);
   imu_pub_ = nh_->advertise<sensor_msgs::Imu>("imu_data", 1);
@@ -27,7 +28,6 @@ ZedCameraNode::ZedCameraNode(
   CameraInit();
   SensorInit();
 
-  node_name_ = ros::this_node::getName();
   ROS_INFO("[%s] Node started", node_name_.c_str());
 }
 
@@ -48,12 +48,12 @@ void ZedCameraNode::CameraInit()
   // Create Video Capture
   cap_ = std::make_unique<sl_oc::video::VideoCapture>(params);
   if (!cap_->initializeVideo()) {
-    ROS_ERROR("[%s] Cannot open camera video capture");
+    ROS_ERROR("[%s] Cannot open camera video capture", node_name_.c_str());
+    ros::shutdown();
     return;
   }
 
-  ROS_INFO_STREAM(
-    "Connected to camera sn: " << cap_->getSerialNumber() << " [" << cap_->getDeviceName() << "]");
+  ROS_INFO("[%s] Connected to camera sn: %d [%s]", node_name_.c_str(), cap_->getSerialNumber(), cap_->getDeviceName().c_str());
 }
 
 void ZedCameraNode::SensorInit()
@@ -63,16 +63,16 @@ void ZedCameraNode::SensorInit()
   std::vector<int> devs = sens_->getDeviceList();
 
   if (devs.size() == 0) {
-    ROS_ERROR("[%s] No available ZED 2, ZED 2i or ZED Mini cameras");
+    ROS_ERROR("[%s] No available ZED 2, ZED 2i or ZED Mini cameras", node_name_.c_str());
+    ros::shutdown();
     return;
   }
 
   uint16_t fw_maior;
   uint16_t fw_minor;
   sens_->getFirmwareVersion(fw_maior, fw_minor);
-  ROS_INFO_STREAM(
-    "Connected to IMU firmware version: " << std::to_string(fw_maior) << "."
-                                          << std::to_string(fw_minor));
+  std::cout<<node_name_<<std::endl;
+  ROS_INFO("[%s] Connected to IMU firmware version: %d.%d", node_name_.c_str(), fw_maior, fw_minor);
 
   is_sens_init_ = sens_->initializeSensors(devs[0]);
 }
@@ -108,7 +108,7 @@ void ZedCameraNode::PublishIMU()
 {
   // Initialize the sensors
   if (!is_sens_init_) {
-    ROS_ERROR("[%s] Connection failed");
+    ROS_ERROR("[%s] Connection failed", node_name_.c_str());
     return;
   }
 

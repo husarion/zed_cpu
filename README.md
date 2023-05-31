@@ -28,7 +28,7 @@ git clone https://github.com/husarion/zed-cpu.git src/zed-cpu
 
 * Install HIDAPI and LIBUSB libraries:
 
-    sudo apt install libusb-1.0-0-dev libhidapi-libusb0 libhidapi-dev
+    `sudo apt install libusb-1.0-0-dev libhidapi-libusb0 libhidapi-dev`
 
 * Install OpenCV:
 

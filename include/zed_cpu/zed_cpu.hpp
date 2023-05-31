@@ -21,7 +21,7 @@ private:
   void PublishIMU();
 
   bool is_sens_init_;
-  string node_name_;
+  std::string node_name_;
   std::shared_ptr<ros::NodeHandle> nh_;
   std::shared_ptr<image_transport::ImageTransport> it_;
   ros::Publisher imu_pub_;
