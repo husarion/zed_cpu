@@ -50,13 +50,13 @@ To be able to access the USB HID device, you must add a udev rule contained in t
 
     ```bash
     cd ~/ros_ws
-    catkin_make
+    colcon build
     ```
 ### Run code
 
     ```bash
     source ~/ros_ws/devel/setup.bash
-    roslaunch zed_cpu zed.launch
+    ros2 launch zed_cpu zed.launch
     ```
 
 ## Coordinates system

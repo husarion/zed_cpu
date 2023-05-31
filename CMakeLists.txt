@@ -66,9 +66,8 @@ install(
   DESTINATION lib/${PROJECT_NAME}
 )
 
-install(
-  DIRECTORY include/
-  DESTINATION include
+install(DIRECTORY launch
+  DESTINATION share/${PROJECT_NAME}
 )
 
 ament_package()

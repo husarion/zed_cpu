@@ -73,6 +73,12 @@ void ZedCameraNode::SensorInit()
   RCLCPP_INFO_STREAM(
     nh_->get_logger(), "Connected to IMU firmware version: " << std::to_string(fw_maior) << "."
                                                              << std::to_string(fw_minor));
+
+  // Initialize the sensors
+  if (!sens_->initializeSensors(devs[0])) {
+    RCLCPP_ERROR(nh_->get_logger(), "IMU initialize failed");
+    return;
+  }
 }
 
 void ZedCameraNode::PublishImages()
@@ -87,18 +93,19 @@ void ZedCameraNode::PublishImages()
     cv::cvtColor(frame_yuv, frame_bgr, cv::COLOR_YUV2BGR_YUYV);
 
     // Split the frame into left and right images
-    cv::Mat leftImage = frame_bgr(cv::Rect(0, 0, frame_bgr.cols / 2, frame_bgr.rows));
-    cv::Mat rightImage = frame_bgr(cv::Rect(frame_bgr.cols / 2, 0, frame_bgr.cols / 2, frame_bgr.rows));
+    cv::Mat left_img = frame_bgr(cv::Rect(0, 0, frame_bgr.cols / 2, frame_bgr.rows));
+    cv::Mat right_img =
+      frame_bgr(cv::Rect(frame_bgr.cols / 2, 0, frame_bgr.cols / 2, frame_bgr.rows));
 
     // Convert the OpenCV images to ROS image messages
-    sensor_msgs::msg::Image::SharedPtr leftMsg =
-      cv_bridge::CvImage(std_msgs::msg::Header(), "bgr8", leftImage).toImageMsg();
-    sensor_msgs::msg::Image::SharedPtr rightMsg =
-      cv_bridge::CvImage(std_msgs::msg::Header(), "bgr8", rightImage).toImageMsg();
+    sensor_msgs::msg::Image::SharedPtr left_msg =
+      cv_bridge::CvImage(std_msgs::msg::Header(), "bgr8", left_img).toImageMsg();
+    sensor_msgs::msg::Image::SharedPtr right_msg =
+      cv_bridge::CvImage(std_msgs::msg::Header(), "bgr8", right_img).toImageMsg();
 
     // Publish the left and right image messages
-    left_image_pub_.publish(leftMsg);
-    right_image_pub_.publish(rightMsg);
+    left_image_pub_.publish(left_msg);
+    right_image_pub_.publish(right_msg);
   }
 }
 
