@@ -5,11 +5,7 @@
 // ROS lib
 #include <rclcpp/rclcpp.hpp>
 #include <image_transport/image_transport.hpp>
-#include <cv_bridge/cv_bridge.h>
 #include <sensor_msgs/msg/imu.hpp>
-
-// OpenCV lib
-#include <opencv2/opencv.hpp>
 
 class ZedCameraNode
 {
@@ -20,17 +16,17 @@ public:
   void run();
 
 private:
-  void cameraInit();
-  void sensorInit();
-  void publishImages();
-  void publishIMU();
+  void CameraInit();
+  void SensorInit();
+  void PublishImages();
+  void PublishIMU();
 
-  bool is_sensInit_;
+  bool is_sens_init_;
   std::shared_ptr<rclcpp::Node> nh_;
   std::shared_ptr<image_transport::ImageTransport> it_;
-  rclcpp::Publisher<sensor_msgs::msg::Imu>::SharedPtr imuPub_;
-  image_transport::Publisher leftImagePub_;
-  image_transport::Publisher rightImagePub_;
+  rclcpp::Publisher<sensor_msgs::msg::Imu>::SharedPtr imu_pub_;
+  image_transport::Publisher left_image_pub_;
+  image_transport::Publisher right_image_pub_;
   std::unique_ptr<sl_oc::video::VideoCapture> cap_;
   std::unique_ptr<sl_oc::sensors::SensorCapture> sens_;
 };

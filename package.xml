@@ -12,15 +12,21 @@
   
   <license>Apache License 2.0</license>
 
-  <build_type>ament_cmake</build_type>
+  <buildtool_depend>ament_cmake</buildtool_depend>
 
+  <depend>compressed_image_transport</depend>
   <depend>cv_bridge</depend>
   <depend>image_transport</depend>
+  <depend>image_transport_plugins</depend>
   <depend>libhidapi-dev</depend>
   <depend>libopencv-dev</depend>
   <depend>libusb-1.0-dev</depend>
   <depend>sensor_msgs</depend>
   <depend>std_msgs</depend>
   <depend>rclcpp</depend>
+
+  <export>
+    <build_type>ament_cmake</build_type>
+  </export>
 
 </package>

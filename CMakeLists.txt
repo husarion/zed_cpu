@@ -27,20 +27,6 @@ find_package(std_msgs REQUIRED)
 find_package(HIDAPI REQUIRED)
 find_package(LIBUSB 1 REQUIRED)
 
-set(dependencies
-  cv_bridge
-  image_transport
-  rclcpp
-  sensor_msgs
-  std_msgs
-)
-
-catkin_package(
-  INCLUDE_DIRS include/zed_cpu
-  LIBRARIES zed_lib
-  CATKIN_DEPENDS ${dependencies}
-)
-
 include_directories(
   include/zed_cpu
   ${HIDAPI_INCLUDE_DIRS}
@@ -67,7 +53,13 @@ target_link_libraries(zed_node
   zed_lib
 )
 
-ament_target_dependencies(zed_node ${dependencies})
+ament_target_dependencies(zed_node 
+  cv_bridge
+  image_transport
+  rclcpp
+  sensor_msgs
+  std_msgs
+)
 
 install(
   TARGETS zed_node

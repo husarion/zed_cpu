@@ -3,14 +3,12 @@
 int main(int argc, char * argv[])
 {
   rclcpp::init(argc, argv);
-  auto node = std::make_shared<rclcpp::Node>("zed_camera");
-
-  auto nh = node->create_sub_node("~");
+  auto node = std::make_shared<rclcpp::Node>("zed_camera", "zed_camera");
   auto it = std::make_shared<image_transport::ImageTransport>(node);
 
-  ZedCameraNode zedCameraNode(nh, it);
+  ZedCameraNode zed_camera_node(node, it);
   while (rclcpp::ok()) {
-    zedCameraNode.run();
+    zed_camera_node.run();
     rclcpp::spin_some(node);
   }
 
