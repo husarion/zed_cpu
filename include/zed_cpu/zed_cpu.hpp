@@ -21,7 +21,6 @@ private:
   void PublishImages();
   void PublishIMU();
 
-  bool is_sens_init_;
   std::shared_ptr<rclcpp::Node> nh_;
   std::shared_ptr<image_transport::ImageTransport> it_;
   rclcpp::Publisher<sensor_msgs::msg::Imu>::SharedPtr imu_pub_;

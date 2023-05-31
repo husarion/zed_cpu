@@ -73,8 +73,6 @@ void ZedCameraNode::SensorInit()
   RCLCPP_INFO_STREAM(
     nh_->get_logger(), "Connected to IMU firmware version: " << std::to_string(fw_maior) << "."
                                                              << std::to_string(fw_minor));
-
-  is_sens_init_ = sens_->initializeSensors(devs[0]);
 }
 
 void ZedCameraNode::PublishImages()
