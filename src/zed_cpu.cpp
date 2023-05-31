@@ -106,12 +106,6 @@ void ZedCameraNode::PublishImages()
 
 void ZedCameraNode::PublishIMU()
 {
-  // Initialize the sensors
-  if (!is_sens_init_) {
-    RCLCPP_ERROR(nh_->get_logger(), "Connection failed");
-    return;
-  }
-
   // Get IMU data with a timeout of 5 milliseconds
   const sl_oc::sensors::data::Imu imu_data = sens_->getLastIMUData(5000);
 
