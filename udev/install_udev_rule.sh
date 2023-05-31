@@ -6,4 +6,4 @@ if (( $EUID != 0 )); then
 fi
 $SUDO cp 99-slabs.rules /etc/udev/rules.d/99-slabs.rules
 
-udevadm trigger
+udevadm trigger --subsystem-match=block --action=change || true
