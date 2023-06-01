@@ -1,18 +1,19 @@
-// Own header
 #include <zed_cpu.hpp>
 
-// ZED lib
-#include "zed_lib/sensorcapture.hpp"
-#include "zed_lib/videocapture.hpp"
+#include <memory>
+#include <vector>
 
-// ROS lib
 #include <rclcpp/rclcpp.hpp>
-#include <image_transport/image_transport.hpp>
 #include <cv_bridge/cv_bridge.h>
+#include <opencv2/opencv.hpp>
+#include <image_transport/image_transport.hpp>
 #include <sensor_msgs/msg/imu.hpp>
 
-// OpenCV lib
-#include <opencv2/opencv.hpp>
+#include <zed_lib/sensorcapture.hpp>
+#include <zed_lib/videocapture.hpp>
+
+namespace zed_cpu
+{
 
 ZedCameraNode::ZedCameraNode(
   const std::shared_ptr<rclcpp::Node> & nh,
@@ -133,3 +134,5 @@ void ZedCameraNode::PublishIMU()
     imu_pub_->publish(imu_msg);
   }
 }
+
+} // namespace zed_cpu
