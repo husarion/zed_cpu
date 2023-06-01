@@ -28,15 +28,21 @@ git clone https://github.com/husarion/zed-cpu.git src/zed-cpu
 
 * Install HIDAPI and LIBUSB libraries:
 
-    `sudo apt install libusb-1.0-0-dev libhidapi-libusb0 libhidapi-dev`
+```bash
+sudo apt install libusb-1.0-0-dev libhidapi-libusb0 libhidapi-dev
+```
 
 * Install OpenCV:
 
-    `sudo apt install libopencv-dev libopencv-viz-dev`
+```bash
+sudo apt install libopencv-dev libopencv-viz-dev
+```
 
 * Install ROS dependencies:
 
-    `rosdep install --from-paths src --ignore-src -r -y`
+```bash
+rosdep install --from-paths src --ignore-src -r -y
+```
 
 
 ### Add udev rule
