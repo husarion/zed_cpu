@@ -15,7 +15,7 @@ namespace zed_cpu
 class ZedCameraNode : public rclcpp::Node
 {
 public:
-  ZedCameraNode(const std::shared_ptr<image_transport::ImageTransport> & it);
+  ZedCameraNode();
   void run();
 
 private:
@@ -24,8 +24,6 @@ private:
   void PublishImages();
   void PublishIMU();
 
-  std::shared_ptr<rclcpp::Node> nh_;
-  std::shared_ptr<image_transport::ImageTransport> it_;
   rclcpp::Publisher<sensor_msgs::msg::Imu>::SharedPtr imu_pub_;
   image_transport::Publisher left_image_pub_;
   image_transport::Publisher right_image_pub_;

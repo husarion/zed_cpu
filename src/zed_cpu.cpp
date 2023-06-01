@@ -16,15 +16,13 @@
 namespace zed_cpu
 {
 
-ZedCameraNode::ZedCameraNode(
-  const std::shared_ptr<rclcpp::Node> & nh,
-  const std::shared_ptr<image_transport::ImageTransport> & it)
-: nh_(nh), it_(it)
+ZedCameraNode::ZedCameraNode() : Node("zed_camera", "zed_camera")
 {
   // ROS initialization
-  left_image_pub_ = it_->advertise("rgb/left_image", 1);
-  right_image_pub_ = it_->advertise("rgb/right_image", 1);
-  imu_pub_ = nh_->create_publisher<sensor_msgs::msg::Imu>("imu_data", 1);
+  left_image_pub_ = image_transport::create_publisher(this, "rgb/left_image");
+  right_image_pub_ = image_transport::create_publisher(this, "rgb/right_image");
+
+  imu_pub_ = create_publisher<sensor_msgs::msg::Imu>("imu_data", 1);
 
   CameraInit();
   SensorInit();
@@ -47,13 +45,13 @@ void ZedCameraNode::CameraInit()
   // Create Video Capture
   cap_ = std::make_unique<sl_oc::video::VideoCapture>(params);
   if (!cap_->initializeVideo()) {
-    RCLCPP_ERROR(nh_->get_logger(), "Cannot open camera video capture");
+    RCLCPP_ERROR(get_logger(), "Cannot open camera video capture");
     rclcpp::shutdown();
     return;
   }
 
   RCLCPP_INFO_STREAM(
-    nh_->get_logger(),
+    get_logger(),
     "Connected to camera sn: " << cap_->getSerialNumber() << " [" << cap_->getDeviceName() << "]");
 }
 
@@ -64,7 +62,7 @@ void ZedCameraNode::SensorInit()
   std::vector<int> devs = sens_->getDeviceList();
 
   if (devs.size() == 0) {
-    RCLCPP_ERROR(nh_->get_logger(), "No available ZED 2, ZED 2i or ZED Mini cameras");
+    RCLCPP_ERROR(get_logger(), "No available ZED 2, ZED 2i or ZED Mini cameras");
     rclcpp::shutdown();
     return;
   }
@@ -73,12 +71,13 @@ void ZedCameraNode::SensorInit()
   uint16_t fw_minor;
   sens_->getFirmwareVersion(fw_maior, fw_minor);
   RCLCPP_INFO_STREAM(
-    nh_->get_logger(), "Connected to IMU firmware version: " << std::to_string(fw_maior) << "."
-                                                             << std::to_string(fw_minor));
+    get_logger(), "Connected to IMU firmware version: " << std::to_string(fw_maior) << "."
+                                                        << std::to_string(fw_minor));
 
   // Initialize the sensors
   if (!sens_->initializeSensors(devs[0])) {
-    RCLCPP_ERROR(nh_->get_logger(), "IMU initialize failed");
+    RCLCPP_ERROR(get_logger(), "IMU initialize failed");
+    rclcpp::shutdown();
     return;
   }
 }
@@ -119,7 +118,7 @@ void ZedCameraNode::PublishIMU()
   if (imu_data.valid == sl_oc::sensors::data::Imu::NEW_VAL) {
     // Create a sensor_msgs/Imu message
     sensor_msgs::msg::Imu imu_msg;
-    imu_msg.header.stamp = nh_->get_clock()->now();
+    imu_msg.header.stamp = get_clock()->now();
     imu_msg.header.frame_id = "imu_frame";
 
     // Convert the IMU data to the sensor_msgs/Imu message fields
@@ -136,4 +135,4 @@ void ZedCameraNode::PublishIMU()
   }
 }
 
-} // namespace zed_cpu
+}  // namespace zed_cpu
