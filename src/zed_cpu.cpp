@@ -72,7 +72,6 @@ void ZedCameraNode::SensorInit()
   uint16_t fw_maior;
   uint16_t fw_minor;
   sens_->getFirmwareVersion(fw_maior, fw_minor);
-  std::cout<<node_name_<<std::endl;
   ROS_INFO("[%s] Connected to IMU firmware version: %d.%d", node_name_.c_str(), fw_maior, fw_minor);
 
   // Initialize the sensors
