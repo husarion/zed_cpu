@@ -1,10 +1,14 @@
-// ZED lib
-#include "zed_lib/sensorcapture.hpp"
-#include "zed_lib/videocapture.hpp"
+#include <memory>
+#include <vector>
 
-// ROS lib
 #include <ros/ros.h>
 #include <image_transport/image_transport.h>
+
+#include <zed_lib/sensorcapture.hpp>
+#include <zed_lib/videocapture.hpp>
+
+namespace zed_cpu
+{
 
 class ZedCameraNode
 {
@@ -29,3 +33,5 @@ private:
   std::unique_ptr<sl_oc::video::VideoCapture> cap_;
   std::unique_ptr<sl_oc::sensors::SensorCapture> sens_;
 };
+
+}  // namespace zed_cpu
