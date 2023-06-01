@@ -26,6 +26,8 @@ ZedCameraNode::ZedCameraNode() : Node("zed_camera", "zed_camera")
 
   CameraInit();
   SensorInit();
+
+  RCLCPP_INFO(get_logger(), "Node started");
 }
 
 void ZedCameraNode::run()
