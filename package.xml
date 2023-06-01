@@ -6,6 +6,7 @@
 
   <author email="rafal.gorecki@husarion.com">Rafał Górecki</author>
   <maintainer email="support@husarion.com">Husarion</maintainer>
+
   <url type="website">https://husarion.com/</url>
   <url type="repository">https://github.com/husarion/zed_cpu</url>
   <url type="bugtracker">https://github.com/husarion/zed_cpu/issues</url>
@@ -21,9 +22,9 @@
   <depend>libhidapi-dev</depend>
   <depend>libopencv-dev</depend>
   <depend>libusb-1.0-dev</depend>
+  <depend>rclcpp</depend>
   <depend>sensor_msgs</depend>
   <depend>std_msgs</depend>
-  <depend>rclcpp</depend>
 
   <export>
     <build_type>ament_cmake</build_type>

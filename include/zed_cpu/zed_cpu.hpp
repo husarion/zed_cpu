@@ -11,12 +11,11 @@
 
 namespace zed_cpu
 {
-class ZedCameraNode
+
+class ZedCameraNode : public rclcpp::Node
 {
 public:
-  ZedCameraNode(
-    const std::shared_ptr<rclcpp::Node> & nh,
-    const std::shared_ptr<image_transport::ImageTransport> & it);
+  ZedCameraNode(const std::shared_ptr<image_transport::ImageTransport> & it);
   void run();
 
 private:
