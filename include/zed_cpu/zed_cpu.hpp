@@ -1,8 +1,8 @@
 #include <memory>
 #include <vector>
 
-#include <ros/ros.h>
 #include <image_transport/image_transport.h>
+#include <ros/ros.h>
 
 #include <zed_lib/sensorcapture.hpp>
 #include <zed_lib/videocapture.hpp>
