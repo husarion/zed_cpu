@@ -1,0 +1,33 @@
+<?xml version="1.0"?>
+<package format="3">
+  <name>zed_cpu</name>
+  <version>1.0.0</version>
+  <description>Package for ZED cameras running on CPU</description>
+
+  <author email="rafal.gorecki@husarion.com">Rafał Górecki</author>
+  <maintainer email="support@husarion.com">Husarion</maintainer>
+
+  <url type="website">https://husarion.com/</url>
+  <url type="repository">https://github.com/husarion/zed_cpu</url>
+  <url type="bugtracker">https://github.com/husarion/zed_cpu/issues</url>
+  
+  <license>Apache License 2.0</license>
+
+  <buildtool_depend>ament_cmake</buildtool_depend>
+
+  <depend>compressed_image_transport</depend>
+  <depend>cv_bridge</depend>
+  <depend>image_transport</depend>
+  <depend>image_transport_plugins</depend>
+  <depend>libhidapi-dev</depend>
+  <depend>libopencv-dev</depend>
+  <depend>libusb-1.0-dev</depend>
+  <depend>rclcpp</depend>
+  <depend>sensor_msgs</depend>
+  <depend>std_msgs</depend>
+
+  <export>
+    <build_type>ament_cmake</build_type>
+  </export>
+
+</package>
