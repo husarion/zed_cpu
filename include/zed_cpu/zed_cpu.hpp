@@ -25,8 +25,8 @@ private:
   void PublishIMU();
 
   rclcpp::Publisher<sensor_msgs::msg::Imu>::SharedPtr imu_pub_;
-  std::unique_ptr<image_transport::Publisher> left_image_pub_;
-  std::unique_ptr<image_transport::Publisher> right_image_pub_;
+  image_transport::Publisher left_image_pub_;
+  image_transport::Publisher right_image_pub_;
   std::unique_ptr<sl_oc::video::VideoCapture> cap_;
   std::unique_ptr<sl_oc::sensors::SensorCapture> sens_;
 };
