@@ -19,8 +19,8 @@ namespace zed_cpu
 ZedCameraNode::ZedCameraNode() : Node("zed_camera", "zed_camera")
 {
   // ROS initialization
-  left_image_pub_ = image_transport::create_publisher(this, "rgb/left_image");
-  right_image_pub_ = image_transport::create_publisher(this, "rgb/right_image");
+  left_image_pub_ = std::make_unique<image_transport::Publisher>(image_transport::create_publisher(this, "rgb/left_image"));
+  right_image_pub_ = std::make_unique<image_transport::Publisher>(image_transport::create_publisher(this, "rgb/right_image"));
 
   imu_pub_ = this->create_publisher<sensor_msgs::msg::Imu>("imu_data", 1);
 
@@ -107,8 +107,8 @@ void ZedCameraNode::PublishImages()
       cv_bridge::CvImage(std_msgs::msg::Header(), "bgr8", right_img).toImageMsg();
 
     // Publish the left and right image messages
-    left_image_pub_.publish(left_msg);
-    right_image_pub_.publish(right_msg);
+    left_image_pub_->publish(left_msg);
+    right_image_pub_->publish(right_msg);
   }
 }
 
